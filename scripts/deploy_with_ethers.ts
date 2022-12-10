@@ -15,7 +15,7 @@ import { deploy } from './ethers-lib'
         console.log(`j3d token address: ${result4.address}`) 
                 var result5 = await deploy('JGame', [BigInt(10 * 10 ** 15), result.address, result2.address, result3.address])
         console.log(`jgame address: ${result5.address}`)
-
+    
         var tx = await result5.setStuff(result.address, result2.address, result3.address, result4.address);
         await tx.wait() 
         console.log(0)
@@ -34,7 +34,7 @@ import { deploy } from './ethers-lib'
              var tx = await result4.transferOwnership(result5.address);
         await tx.wait()
         console.log(5) 
-        
+        /*
         var cost = await result4.calculatePrice(BigInt(1000 * 10 ** 18));
         var tx = await result5.ifIwasinla2(BigInt(4),BigInt(4),{value: BigInt(cost)})
         await tx.wait()
@@ -80,7 +80,7 @@ import { deploy } from './ethers-lib'
         var tx = await result3.claim()
         await tx.wait()
         console.log(tx)
-
+*/
 // token fanout setTokenAddress
 // all transferOwnership
         
