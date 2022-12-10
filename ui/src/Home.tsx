@@ -434,7 +434,7 @@ done = true;
 }, [contract])
   const gameAddressEther = "0x9EFCfaDB72446eD75Aa0399aE09D7b249a803B0d"// = "0xF852ca096C834c46E69FebB131Bce6c687115D65"
 const gameAddressEtherG = "0x7FDfcaE6177DAFfa327b9fFbd4bB465b77854cAf"
-const gameAddressMatic = "0xFED9A4108118EFaAE629096324498af2C168d944"
+const gameAddressMatic = "0x577309f7779Ffabaa4F7c9bb5C653830F4217d4D"
 const gameAddressArb = "0x0e0168fE7A2DEb2dff824794d4DeF619820f13Ce"// "0x99214692FDb627828b02e9B57b345909689f06aC"
 async function connect(){
   const web3Provider = await connectToEthereum();
