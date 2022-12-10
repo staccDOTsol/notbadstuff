@@ -2,11 +2,11 @@ import {useCallback, useEffect, useMemo, useState} from "react";
 import styled from "styled-components";
 import confetti from "canvas-confetti";
 import Countdown from "react-countdown";
-import * as gameAbi from '../../contracts/artifacts/JGame.json'
-import * as fanoutAbi from '../../contracts/artifacts/NFTFanout.json'
-import * as keyAbi from '../../contracts/artifacts/GameItem.json'
-import * as j3dAbi from '../../contracts/artifacts/J3d.json'
-import * as tokfanoutAbi from '../../contracts/artifacts/Fanout.json'
+import * as gameAbi from './artifacts/JGame.json'
+import * as fanoutAbi from './artifacts/NFTFanout.json'
+import * as keyAbi from './artifacts/GameItem.json'
+import * as j3dAbi from './artifacts/J3d.json'
+import * as tokfanoutAbi from './artifacts/Fanout.json'
 import {Snackbar, Paper, LinearProgress, Chip, Button} from "@material-ui/core";
 import BN from 'bn.js'
 import React from 'react'
@@ -360,12 +360,14 @@ useEffect(() => {
 			console.log(key)
 			
 			const fanout = new ethers.Contract(await (contract2 as ethers.Contract).fanout(), fanoutAbi.abi, signer)
+			const nftFanout = new ethers.Contract(await (contract2 as ethers.Contract).nftFanout(), fanoutAbi.abi, signer)
 			console.log(tokenIds.toNumber()) 
 			let mks: any = []
 			let ct = 0;
 			try  {
 				console.log((await fanout.totalClaims()).toString())
-				ct= parseInt((await fanout.totalClaims()).toString()) / 10 ** 18 / 10 ** 18
+				ct+= parseInt((await fanout.totalClaims()).toString()) / 10 ** 18
+				ct+= parseInt((await nftFanout.totalClaims()).toString()) / 10 ** 18
 				console.log(ct)
 				setClaimed(ct)
 						}
