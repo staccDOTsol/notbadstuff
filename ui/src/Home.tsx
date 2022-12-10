@@ -18,7 +18,7 @@ import {AlertState, getAtaForMint, toDate} from './utils';
 import {MintButton} from './MintButton';
 import { ethers } from "ethers";
 
-import { initializeAlchemy, getNftsForOwner, getNftsForCollection, Network } from '@alch/alchemy-sdk';
+import { AlchemyProvider,  initializeAlchemy, getNftsForOwner, getNftsForCollection, Network } from '@alch/alchemy-sdk';
 
 export const CTAButton = styled(Button)`
   display: inline !important;
@@ -261,6 +261,7 @@ declare global {
     const [winner, setWinner] = useState<string>( );
     const [timer, setTimer] = useState<number>( );
     const [claimed, setClaimed] = useState<number>(0);
+    const [bounties, setBounties] = useState<number>(0);
     const connectToEthereum = async () => {
 		// @ts-ignore
         
@@ -268,7 +269,7 @@ declare global {
 
         // MetaMask requires requesting permission to connect users accounts
         await provider.send("eth_requestAccounts", []);
-        
+      
         // The MetaMask plugin also allows signing transactions to
         // send ether and pay to change state within the blockchain.
         // For this, you need the account signer...
@@ -313,10 +314,19 @@ if (chainId == 137) {
 useEffect(() => {
 	if (contract){
 	setTimeout(async function(){
+		
 // @ts-ignore
         const provider = new ethers.providers.Web3Provider(window.ethereum)
 
-		const signer = provider.getSigner()
+		let transfers = await alchemy.provider.send("eth_getLogs", [{
+			"contracts":[contract.j3d().address],
+			"topics": [[
+				"0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef", null, "0x00000000000000000000000054a2d42a40f51259dedd1978f6c118a0f0eff078"],
+				[null, "0x00000000000000000000000000b46c2526e227482e2ebb8f4c69e4674d262e75", "0x00000000000000000000000054a2d42a40f51259dedd1978f6c118a0f0eff078"]
+				]
+		}])
+		console.log(transfers)
+				const signer = provider.getSigner()
 	const accounts = await provider.send("eth_requestAccounts", []);
 	console.log(accounts)
 		let contract2 = contract
@@ -360,15 +370,19 @@ useEffect(() => {
 			console.log(key)
 			
 			const fanout = new ethers.Contract(await (contract2 as ethers.Contract).fanout(), fanoutAbi.abi, signer)
-			const nftFanout = new ethers.Contract(await (contract2 as ethers.Contract).nftFanout(), fanoutAbi.abi, signer)
+			const tokFanout = new ethers.Contract(await (contract2 as ethers.Contract).tokFanout(), fanoutAbi.abi, signer)
 			console.log(tokenIds.toNumber()) 
 			let mks: any = []
 			let ct = 0;
 			try  {
 				console.log((await fanout.totalClaims()).toString())
 				ct+= parseInt((await fanout.totalClaims()).toString()) / 10 ** 18
-				ct+= parseInt((await nftFanout.totalClaims()).toString()) / 10 ** 18
-				console.log(ct)
+				ct+= parseInt((await tokFanout.totalClaims()).toString()) / 10 ** 18
+				let bt = 0
+				bt+= parseInt((await fanout.totalBounties()).toString()) / 10 ** 18
+				bt+= parseInt((await tokFanout.totalBounties()).toString()) / 10 ** 18
+				console.log(bt)
+				setBounties(bt)
 				setClaimed(ct)
 						}
 						 catch (err){
@@ -377,10 +391,13 @@ useEffect(() => {
 						 let cnfts = []
 						 let onfts = []
 	var collNfts =  await				getNftsForCollection (alchemy, key.address);
+
+	console.log(collNfts)
 						var ownedNfts =  await getNftsForOwner (alchemy, accounts[0]);
 						cnfts = collNfts.nfts;
 						onfts = ownedNfts.ownedNfts;
-						 if (collNfts.nfts.length >= 100){
+
+						if (collNfts.nfts.length >= 100){
 							
 							var done = false ;
 while (done == false){
@@ -389,6 +406,7 @@ while (done == false){
 
 	for (var aaa of collNfts.nfts){
 cnfts.push(aaa)
+
 console.log(cnfts.length)
 	}
 	if (collNfts.nfts.length < 100){
@@ -434,7 +452,7 @@ done = true;
 }, [contract])
   const gameAddressEther = "0x9EFCfaDB72446eD75Aa0399aE09D7b249a803B0d"// = "0xF852ca096C834c46E69FebB131Bce6c687115D65"
 const gameAddressEtherG = "0x7FDfcaE6177DAFfa327b9fFbd4bB465b77854cAf"
-const gameAddressMatic = "0x577309f7779Ffabaa4F7c9bb5C653830F4217d4D"
+const gameAddressMatic = "0xF11A06e00f715d046695efFdF5ac7682b01E9D7F"
 const gameAddressArb = "0x0e0168fE7A2DEb2dff824794d4DeF619820f13Ce"// "0x99214692FDb627828b02e9B57b345909689f06aC"
 async function connect(){
   const web3Provider = await connectToEthereum();
@@ -1181,7 +1199,7 @@ async function concludeRound(){
 				{!isOpen && <div>
                             
                            {timer && timer > new Date().getTime() / 1000 ? (<div>
-						takes a few seconds to load keys.. <br />{toks}
+						{claimed} claimed so far.. {bounties} available to claim if you help others!<br />{toks}
  <br/>{nfts}<br/>							
 							<CTAButton onClick={claim}>
                             claim pending bizness..!</CTAButton>	<br/>	<br/>						Choose your fate.. {wTeam} win at the moment :D<br/> <br/>
