@@ -126,6 +126,25 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_user",
+						"type": "address"
+					}
+				],
+				"name": "getAmountToClaimV",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "getTotalFunds",
 				"outputs": [
@@ -322,7 +341,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/sighh.sol": "Fanout"
+			"contracts/la22la.sol": "Fanout"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -480,12 +499,12 @@
 				"dweb:/ipfs/QmQJquTMtc6fgm5JQzGdsGpA2fqBe3MHWEdt2qzaLySMdN"
 			]
 		},
-		"contracts/sighh.sol": {
-			"keccak256": "0x7d463026a943ba99e8827e84658f0df7f768a333d931be756a3120455baa5410",
+		"contracts/la22la.sol": {
+			"keccak256": "0x5184b7d67364a6fc7ba806e3f3ce00634c1c503d708d7414fa4091509288f92f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://54e5735bda1b5fa78eb77725dbbd30f8ec961a2a928483814a377d50f439a1e4",
-				"dweb:/ipfs/QmdvGPRpfCBVTd6cEPWU3xUo8RyLhjnkDwDexWbU6mhgKq"
+				"bzz-raw://ebdce299687de2118c8cc0e74944600626cfbc78f636a8e60bb412bbc19b8c32",
+				"dweb:/ipfs/QmY6GXFrADTuwEcVf5c39qonfy87aHmiTLW3yCHmhLFD6C"
 			]
 		}
 	},
